@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Str;
 
 class CategoriesController extends Controller
 {
@@ -40,10 +41,16 @@ class CategoriesController extends Controller
      */
     public function store(Request $request)
     {
+
+        // Request merge
+        $request->merge([
+            'slug' => Str::slug($request->post('name'))
+        ]);
+
         $category = Category::create($request->all());
 
-        // PRG
-        return Redirect::route('categories.index');
+        return Redirect::route('categories.index')
+            ->with('success', 'Category Created Successfly');
     }
 
     /**
