@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Dashboard;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
 
 class CategoriesController extends Controller
 {
@@ -16,7 +17,6 @@ class CategoriesController extends Controller
     public function index()
     {
         $categories = Category::all(); // Return Collection Object
-        $categories->first();
         return view('dashboard.categories.index', compact('categories'));
     }
 
@@ -27,7 +27,9 @@ class CategoriesController extends Controller
      */
     public function create()
     {
-        //
+
+        $parents = Category::all();
+        return view('dashboard.categories.create', compact('parents'));
     }
 
     /**
@@ -38,7 +40,10 @@ class CategoriesController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $category = Category::create($request->all());
+
+        // PRG
+        return Redirect::route('categories.index');
     }
 
     /**
