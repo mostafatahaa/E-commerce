@@ -17,13 +17,21 @@
 @section('content')
 
 <div class="mb-5">
-    <a href="{{ route('categories.create') }}" class="btn btn-sm btn-outline-primary">New Category</a>
+    <a href="{{ route('dashboard.categories.create') }}" class="btn btn-sm btn-outline-primary">New Category</a>
 </div>
 
 @if(session()->has('success'))
 
 <div class="alert alert-success">
     {{session('success')}}
+</div>
+
+@endif
+
+@if(session()->has('info'))
+
+<div class="alert alert-info">
+    {{session('info')}}
 </div>
 
 @endif
@@ -49,15 +57,15 @@
             <td>{{$category->parent_id}}</td>
             <td>{{$category->created_at}}</td>
             <td>
-                <a href="{{route('categories.edit', $category->id)}}" class="btn btn-sm btn-outline-success">Edit</a>
+                <a href="{{route('dashboard.categories.edit', $category->id)}}" class="btn btn-sm btn-outline-success">Edit</a>
             </td>
 
             <td>
-                <form action="" method="post">
+                <form action="{{route('dashboard.categories.destroy', $category->id)}}" method="post">
                     @csrf
                     <!-- Form Method Spoofing -->
                     @method('delete')
-                    <a href="{{route('categories.destroy',  $category->id)}}" class="btn btn-sm btn-outline-danger">Delete</a>
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
                 </form>
             </td>
 
