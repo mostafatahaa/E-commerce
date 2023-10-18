@@ -16,19 +16,19 @@
 
 @section('content')
 
-<form action="{{ route('categories.store')}} " method="post">
+<form action="{{ route('dashboard.categories.store')}} " method="post">
     @csrf
     <div class="form-group">
         <lable>Category Name</lable>
         <input type="text" name="name" class="form-control">
     </div>
+
     <div class="form-group">
-        <lable>Category Parent</lable>
+        <lable for="">Category Parent</lable>
         <select name="parent_id" class="form-control form-select">
             <option value="">Primary Category</option>
-
             @foreach($parents as $parent)
-            <option value="{{ $parent->parent_id }}">{{$parent->name}}</option>
+            <option value="{{ $parent->id }}">{{$parent->name}}</option>
             @endforeach
 
         </select>
@@ -53,7 +53,7 @@
                 </label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="radio" name="status" value="arhived">
+                <input class="form-check-input" type="radio" name="status" value="archived">
                 <label class="form-check-label">
                     Archived
                 </label>
