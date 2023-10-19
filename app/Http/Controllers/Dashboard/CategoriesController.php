@@ -7,6 +7,7 @@ use App\Models\Category;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class CategoriesController extends Controller
@@ -32,7 +33,11 @@ class CategoriesController extends Controller
     {
 
         $parents = Category::all();
-        return view('dashboard.categories.create', compact('parents'));
+
+        // this for form in create.blade.view and this object will return empty vlaues
+        $category = new Category();
+
+        return view('dashboard.categories.create', compact('parents', 'category'));
     }
 
     /**
@@ -44,12 +49,17 @@ class CategoriesController extends Controller
     public function store(Request $request)
     {
 
-        // Request merge
+
+        // Requset merge
         $request->merge([
             'slug' => Str::slug($request->post('name'))
         ]);
 
-        $category = Category::create($request->all());
+        $data = $request->except('image');
+
+        $data['image'] = $this->uploadedImage($request);
+
+        $category = Category::create($data);
 
         return Redirect::route('dashboard.categories.index')
             ->with('success', 'Category Created Successfly');
@@ -106,8 +116,21 @@ class CategoriesController extends Controller
     {
         // will stop updating data if id is not exists and redirect ot 400 page
         $category = Category::findOrFail($id);
+        $data = $request->except('image');
 
-        $category->update($request->all());
+        $old_image = $category->image;
+
+        // Request merge
+
+        $data['image'] = $this->uploadedImage($request);
+
+
+        if ($old_image && $data['image']) {
+            Storage::disk('public')->delete($old_image);
+        }
+
+
+        $category->update($data);
         return Redirect::route('dashboard.categories.index')
             ->with('success', 'Category Updated Successfully');
     }
@@ -120,8 +143,29 @@ class CategoriesController extends Controller
      */
     public function destroy($id)
     {
-        Category::destroy($id);
+        $category = Category::findOrFail($id);
+        $category->delete();
+        dd($category);
+
+        if ($category->image) {
+            Storage::disk('public')->delete($category->image);
+        }
+
         return Redirect::route('dashboard.categories.index')
             ->with('success', 'Category Deleted Successfully');
+    }
+
+    protected function uploadedImage(Request $request)
+    {
+        // if request hasn't it will make this method return null and if not it will return the path
+        if (!$request->hasFile('image')) {
+            return;
+        }
+
+        $file = $request->file('image'); // return uploadedFile object
+        $path =  $file->store('uploads', [
+            'disk' => 'public'
+        ]); // or i can put key and value ('disk' => 'public')
+        return $path;
     }
 }
