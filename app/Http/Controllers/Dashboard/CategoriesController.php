@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
 use Exception;
 use Illuminate\Http\Request;
@@ -19,6 +20,7 @@ class CategoriesController extends Controller
      */
     public function index()
     {
+
         $categories = Category::all(); // Return Collection Object
 
         return view('dashboard.categories.index', compact('categories'));
@@ -48,12 +50,10 @@ class CategoriesController extends Controller
      */
     public function store(Request $request)
     {
-
-        $request->validate([
-            'name'          => 'required|string|min:3|max:255',
-            'parent_id'     => ['int', 'exists:categories,id'],
-            'image'         => 'image|max:1048576|dimensions:min_width=100,min_height=100',
-            'status'        => 'in:active,archived'
+        // data after validate
+        $clean_data = $request->validate(Category::rules(), [
+            'name.required' => 'Sorry This Filead (:attribute) Is Required',
+            'name.unique' => 'This Name Is Already Exists'
         ]);
 
         // Requset merge
@@ -118,8 +118,10 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(CategoryRequest $request, $id)
     {
+
+
         // will stop updating data if id is not exists and redirect ot 400 page
         $category = Category::findOrFail($id);
         $data = $request->except('image');
@@ -128,10 +130,14 @@ class CategoriesController extends Controller
 
         // Request merge
 
-        $data['image'] = $this->uploadedImage($request);
+        $new_image = $this->uploadedImage($request);
+
+        if ($new_image) {
+            $data['image'] = $new_image;
+        }
 
 
-        if ($old_image && $data['image']) {
+        if ($old_image && $new_image) {
             Storage::disk('public')->delete($old_image);
         }
 
