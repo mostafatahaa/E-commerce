@@ -21,17 +21,15 @@ class CategoriesController extends Controller
     public function index()
     {
         $request = request();
-        $query = Category::query();
 
-        if ($name = $request->query('name')) {
-            $query->where('name', 'LIKE', "%{$name}%");
-        }
-
-        if ($status = $request->query('status')) {
-            $query->where('status', '=', $status);
-        }
-
-        $categories = $query->paginate(1);
+        $categories = Category::join('categories as parents', 'parents.id', '=', 'categories.parent_id')
+            ->select([
+                'categories.*',
+                'parents.name as parent_name'
+            ])
+            ->filter($request->query())
+            ->orderBy('categories.name')
+            ->paginate();
 
         return view('dashboard.categories.index', compact('categories'));
     }
@@ -167,7 +165,6 @@ class CategoriesController extends Controller
     {
         $category = Category::findOrFail($id);
         $category->delete();
-        dd($category);
 
         if ($category->image) {
             Storage::disk('public')->delete($category->image);
