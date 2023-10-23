@@ -7,7 +7,7 @@
 @section('breadcrumb')
 @parent
 
-<li class="breedcrumb-item active">Categories Page</li>
+<li class="breedcrumb-item active"><a href="">Categories Page</a></li>
 
 @endsection
 
