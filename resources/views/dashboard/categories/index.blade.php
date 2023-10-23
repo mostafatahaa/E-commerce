@@ -7,7 +7,7 @@
 @section('breadcrumb')
 @parent
 
-<li class="breedcrumb-item active">Categories Page</li>
+<li class="breadcrumb-item"><a>Categories</a></li>
 
 @endsection
 
@@ -18,6 +18,7 @@
 
 <div class="mb-5">
     <a href="{{ route('dashboard.categories.create') }}" class="btn btn-sm btn-outline-primary">New Category</a>
+    <a href="{{ route('dashboard.categories.trash') }}" class="btn btn-sm btn-outline-dark ml-2">Trashed</a>
 </div>
 
 <x-alert type="success" />
@@ -42,7 +43,6 @@
             <th>Parent</th>
             <th>Status</th>
             <th>Created At</th>
-            <th>Action</th>
         </tr>
     </thead>
 
