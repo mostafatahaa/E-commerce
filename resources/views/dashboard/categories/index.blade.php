@@ -18,7 +18,7 @@
 
 <div class="mb-5">
     <a href="{{ route('dashboard.categories.create') }}" class="btn btn-sm btn-outline-primary">New Category</a>
-    <a href="{{ route('dashboard.categories.trash') }}" class="btn btn-sm btn-outline-dark ml-2">Trashed</a>
+    <a href="{{ route('dashboard.categories.trash') }}" class="btn btn-sm btn-outline-dark ml-2">Trash</a>
 </div>
 
 <x-alert type="success" />

@@ -16,6 +16,7 @@ Route::group([
     Route::get('/', [DashboardController::class, 'index'])
         ->name('dashboard');
 
+
     Route::get('/categories/trash', [CategoriesController::class, 'trash'])
         ->name('categories.trash');
 
