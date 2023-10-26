@@ -16,4 +16,14 @@ class Product extends Model
     {
         static::addGlobalScope('store', new StoreScope());
     }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id', 'id');
+    }
+
+    public function store()
+    {
+        return $this->belongsTo(Store::class, 'store_id', 'id');
+    }
 }
