@@ -7,6 +7,7 @@ use App\Http\Requests\CategoryRequest;
 use App\Models\Category;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -22,10 +23,18 @@ class CategoriesController extends Controller
     {
         $request = request();
 
-        $categories = Category::leftJoin('categories as parents', 'parents.id', '=', 'categories.parent_id')
+        $categories = Category::with('parent')/*leftJoin('categories as parents', 'parents.id', '=', 'categories.parent_id')
             ->select([
-                'categories.*',
-                'parents.name as parent_name'
+            'categories.*',
+            'parents.name as parent_name'
+            ])*/
+            // ->select('categories.*')
+            // ->selectRaw('(SELECT COUNT(*) FROM products WHERE category_id = categories.id) as product_count')
+            // ->addSelect(DB::raw('(SELECT COUNT(*) FROM products WHERE category_id = categories.id) as product_count'))
+            ->withCount([
+                'products as products_number' => function ($query) {
+                    $query->where('status', '=', 'active');
+                }
             ])
             ->filter($request->query())
             ->orderBy('categories.name')
@@ -85,9 +94,11 @@ class CategoriesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Category $category)
     {
-        //
+        return view('dashboard.categories.show', [
+            'category' => $category
+        ]);
     }
 
     /**
