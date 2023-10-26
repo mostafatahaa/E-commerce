@@ -17,6 +17,24 @@ class Category extends Model
         'name', 'description', 'image', 'status', 'slug', 'parent_id'
     ];
 
+    public function parent()
+    {
+        return $this->belongsTo(Category::class, 'parent_id', 'id')
+            ->withDefault([
+                'name' => '-'
+            ]);
+    }
+
+    public function children()
+    {
+        return $this->hasMany(Category::class, 'parent_id', 'id');
+    }
+
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'category_id', 'id');
+    }
+
     public function scopeActive(Builder $builder)
     {
         $builder->where('status', '=', 'active');
@@ -51,7 +69,7 @@ class Category extends Model
                 // new Filter(['MOstafa', 'admin', 'php']),
             ],
             'parent_id'     => ['nullable', 'int', 'exists:categories,id'],
-            'image'         => 'image|max:1048576|dimensions:min_width=100,min_height=100',
+            'image'         => 'image|max:20240 |dimensions:min_width=100,min_height=100', // max:20240kb = 20mb
             'status'        => 'in:active,archived'
         ];
     }
