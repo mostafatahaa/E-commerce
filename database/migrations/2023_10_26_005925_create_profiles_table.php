@@ -21,7 +21,7 @@ return new class extends Migration
             $table->enum('gender', ['male', 'female'])->nullable();
             $table->string('street_address')->nullable();
             $table->string('city')->nullable();
-            $table->string('stats')->nullable();
+            $table->string('state')->nullable();
             $table->string('postal_code')->nullable();
             $table->char('country', 2);
             $table->char('locale', 2)->default('en');
