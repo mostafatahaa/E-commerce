@@ -8,11 +8,10 @@
 <lable>{{$label}}</lable>
 @endif
 
-<input label="Category Name" type="{{$type}}" name="{{$name}}" value="{{old($name, $value)}}" {{$attributes ->class([
+<input type="{{$type}}" name="{{$name}}" value="{{old($name, $value)}}" {{$attributes->class([
     'form-control',
     'is-invalid' => $errors->has($name)
 ])}}>
-
 @error($name)
 <div class="text-danger">{{$message}}</div>
 @enderror
