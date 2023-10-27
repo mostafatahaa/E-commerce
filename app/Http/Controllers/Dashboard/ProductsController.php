@@ -20,8 +20,6 @@ class ProductsController extends Controller
 
         $products = Product::with(['category', 'store'])->paginate();
 
-        dd($products);
-
         return view('dashboard.products.index', compact('products'));
     }
 
