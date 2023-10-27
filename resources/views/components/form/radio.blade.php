@@ -1,6 +1,10 @@
 @props([
-'name', 'options', 'checked' => false
+'name', 'options', 'checked' => false, 'label' => false
 ])
+
+@if($label)
+<lable>{{$label}}</lable>
+@endif
 
 @foreach($options as $value => $text)
 
