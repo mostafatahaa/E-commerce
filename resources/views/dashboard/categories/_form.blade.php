@@ -1,14 +1,4 @@
-@if($errors->any())
-<div class="alert alert-danger">
-    <h3>Error Occurred!</h3>
-    <ul>
-        @foreach($errors->all() as $error)
-        <li>{{$error}}</li>
-        @endforeach
-    </ul>
-</div>
-@endif
-
+<x-form.alert />
 <div class="form-group">
     <x-form.label>Category Name</x-form.label>
     <x-form.input type="text" name="name" :value="$category->name" />
