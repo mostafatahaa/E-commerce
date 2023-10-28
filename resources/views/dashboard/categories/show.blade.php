@@ -7,7 +7,7 @@
 @section('breadcrumb')
 @parent
 
-<li class="breedcrumb-item active">{{$category->name}}</li>
+<li class="breadcrumb-item"><a>{{$category->name}}</a></li>
 
 @endsection
 
