@@ -12,6 +12,11 @@ class Product extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name', 'slug', 'description', 'price', 'compare_price',
+        'status', 'category_id', 'store_id', 'image'
+    ];
+
     protected static function booted()
     {
         static::addGlobalScope('store', new StoreScope());
@@ -25,5 +30,17 @@ class Product extends Model
     public function store()
     {
         return $this->belongsTo(Store::class, 'store_id', 'id');
+    }
+
+    public function tags()
+    {
+        return $this->belongsToMany(
+            Tag::class,     // trelated Model
+            'product_tag',  // pivot tabel name
+            'product_id',   // Foreign key in pivot tabel for the current model
+            'tag_id',       // Foreign key in pivote tabel for the related model
+            'id',           // Primary key for current model
+            'id'            // Primary key for related model
+        );
     }
 }
