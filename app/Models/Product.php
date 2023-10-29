@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class Product extends Model
 {
@@ -42,5 +43,34 @@ class Product extends Model
             'id',           // Primary key for current model
             'id'            // Primary key for related model
         );
+    }
+
+    protected static function scopeActive(Builder $builder)
+    {
+        $builder->where('status', '=', 'active');
+    }
+
+    // Accessors method
+    public function getImageUrlAttribute()
+    {
+        if (!$this->image) {
+            return "https://static.hertz-audio.com/media/2021/05/no-product-image.png";
+        }
+
+        if (Str::startsWith($this->image, ['http://', 'https://'])) {
+            return $this->image;
+        }
+
+        return asset('storage/' . $this->image);
+    }
+
+    // Accessors method
+    public function getSalePercentAttribute()
+    {
+        if (!$this->compare_price) {
+            return 0;
+        }
+
+        return number_format(100 - (100 * $this->price / $this->compare_price), 2);
     }
 }
