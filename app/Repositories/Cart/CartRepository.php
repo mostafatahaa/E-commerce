@@ -14,7 +14,7 @@ interface CartRepository
     public function add(Product $product, $quantity = 1);
 
     // update quantity for item
-    public function update(Product $product, $quantity);
+    public function update($id, $quantity);
 
     // delete specific item form cart
     public function delete($id);
