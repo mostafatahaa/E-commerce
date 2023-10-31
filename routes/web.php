@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Front\CartController;
 use App\Http\Controllers\Front\HomeController;
 use App\View\Components\FrontLayout;
 use Illuminate\Support\Facades\Route;
@@ -18,6 +19,8 @@ use App\Http\Controllers\Front\ProductsController;
 |
 */
 
+Route::resource('cart', CartController::class);
+
 Route::get('/', [HomeController::class, 'index'])
     ->name('home');
 
@@ -26,6 +29,7 @@ Route::get('/products', [ProductsController::class, 'index'])
 
 Route::get('/products/{product:slug}', [ProductsController::class, 'show'])
     ->name('products.show');
+
 
 
 
