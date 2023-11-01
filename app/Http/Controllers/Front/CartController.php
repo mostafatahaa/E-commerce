@@ -5,10 +5,18 @@ namespace App\Http\Controllers\Front;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
 use App\Repositories\Cart\CartModelRepository;
+use App\Repositories\Cart\CartRepository;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 
 class CartController extends Controller
 {
+    protected $cart;
+
+    public function __construct(CartRepository $cart)
+    {
+        $this->cart = $cart;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -16,11 +24,8 @@ class CartController extends Controller
      */
     public function index()
     {
-        $repository = new CartModelRepository();
-        $items = $repository->get();
-
         return view('front.cart', [
-            'cart' => $items
+            'cart' => $this->cart
         ]);
     }
 
@@ -36,9 +41,12 @@ class CartController extends Controller
             'product_id' => ['required', 'int', 'exists:products,id'],
             'quantity'   => ['nullable', 'int', 'min:1'],
         ]);
+
         $product = Product::findOrfail($request->post('product_id'));
-        $repository = new CartModelRepository();
-        $repository->add($product, $request->post('quantity'));
+        $this->cart->add($product, $request->post('quantity'));
+        return redirect()
+            ->route('cart.index')
+            ->with('success', 'Product Added To Cart Successflly!');
     }
 
 
@@ -52,12 +60,9 @@ class CartController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'product_id' => ['required', 'int', 'exists:products,id'],
-            'quantity'   => ['nullable', 'int', 'min:1'],
+            'quantity'   => ['required', 'int', 'min:1'],
         ]);
-        $product = Product::findOrfail($request->post('product_id'));
-        $repository = new CartModelRepository();
-        $repository->update($product, $request->post('quantity'));
+        $this->cart->update($id, $request->post('quantity'));
     }
 
     /**
@@ -68,7 +73,9 @@ class CartController extends Controller
      */
     public function destroy($id)
     {
-        $repository = new CartModelRepository();
-        $repository->delete($product, $request->post('quantity'));
+        $this->cart->delete($id);
+        return [
+            'message' => 'Item Deleted!'
+        ];
     }
 }
