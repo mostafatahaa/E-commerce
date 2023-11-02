@@ -1,4 +1,4 @@
-@props(['name', 'options', 'selected', 'label' => false])
+@props(['name', 'options', 'selected' => '', 'label' => false])
 
 @if($label)
 <lable>{{$label}}</lable>
