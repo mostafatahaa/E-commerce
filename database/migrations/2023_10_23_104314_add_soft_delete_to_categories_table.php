@@ -14,7 +14,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('categories', function (Blueprint $table) {
-            $table->softDeletes()->after('columnName');
+            $table->softDeletes()->after('updated_at');
         });
     }
 
