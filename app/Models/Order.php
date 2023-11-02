@@ -30,8 +30,9 @@ class Order extends Model
     // many to many (الاوردر يحتوى على اكثر من منتج والمنتج ممكن يكون في اكتر من اودر)
     public function products()
     {
-        return $this->belongsToMany(Product::class, 'order_items', 'product_id', 'id', 'id')
+        return $this->belongsToMany(Product::class, 'order_items', 'order_id', 'product_id', 'id')
             ->using(OrderItem::class)
+            ->as('order_item')
             ->withPivot([
                 'product_name', 'price', 'quantity', 'options'
             ]);
