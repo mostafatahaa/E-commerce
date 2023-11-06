@@ -11,9 +11,9 @@ use Illuminate\Support\Facades\Route;
 
 // using route group
 Route::group([
-    'middleware' => ['auth', 'auth.type:admin,super-admin'],
+    'middleware' => ['auth:admin'],
     'as' => 'dashboard.', // all routes names will start with dashboard. 
-    'prefix' => 'dashboard' // all routes  will start with dashboard 
+    'prefix' => 'admin/dashboard' // all routes  will start with admin/dashboard 
 ], function () {
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
