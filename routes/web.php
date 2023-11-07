@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Front\Auth\TwoFactorAuthController;
 use App\Http\Controllers\Front\CartController;
 use App\Http\Controllers\Front\CheckoutController;
 use App\Http\Controllers\Front\HomeController;
@@ -33,6 +34,9 @@ Route::get('/products/{product:slug}', [ProductsController::class, 'show'])
 
 Route::get('checkout', [CheckoutController::class, 'create'])->name('checkout');
 Route::post('checkout', [CheckoutController::class, 'store']);
+
+Route::get('auth/user/2fa', [TwoFactorAuthController::class, 'index'])
+    ->name('front.2fa');
 
 
 
