@@ -7,10 +7,16 @@ use App\Http\Resources\ProductResource;
 use App\Models\Product;
 use GuzzleHttp\Handler\Proxy;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 
 class ProductsController extends Controller
 {
+
+    public function __construct()
+    {
+        $this->middleware('auth:sanctum')->except('index', 'show');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -43,6 +49,12 @@ class ProductsController extends Controller
             'compare_price' => 'numeric|gt:price',
 
         ]);
+        $user = $request->user();
+        if (!$user->tokenCan('products.create')) {
+            return response([
+                'message' => 'Not Allowed'
+            ], 403);
+        }
 
         $product = Product::create($request->all());
         return Response::json($product, 201, [
@@ -81,6 +93,13 @@ class ProductsController extends Controller
 
         ]);
 
+        $user = $request->user();
+        if (!$user->tokenCan('products.update')) {
+            return response([
+                'message' => 'Not Allowed'
+            ], 403);
+        }
+
         $product->update($request->all());
         return Response::json($product);
     }
@@ -94,6 +113,15 @@ class ProductsController extends Controller
      */
     public function destroy($id)
     {
+
+        $user = Auth::guard('sanctum')->user();
+
+        if (!$user->tokenCan('products.delete')) {
+            return response([
+                'message' => 'Not Allowed'
+            ], 403);
+        }
+
         Product::destroy($id);
         return [
             'message'   => 'Product deleted successfully'

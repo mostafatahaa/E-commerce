@@ -69,8 +69,10 @@ return [
     |
     */
 
-    'timezone' => 'UTC',
-    'currency' => 'USD',
+    'timezone'  => 'UTC',
+    'currency'  => 'USD',
+
+    'api_token' => env('API_TOKEN'),
 
 
     /*
