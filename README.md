@@ -1,5 +1,5 @@
-## About E-Commerce
-# PHP-Laravel , MySql , Bootstrap
+# About E-Commerce
+## PHP-Laravel , MySql , Bootstrap
 
 - [ E-commerce is a store that has users,admins and main
     page for products such as (active product - featured
